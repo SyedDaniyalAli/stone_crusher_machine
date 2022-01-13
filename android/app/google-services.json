@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "62736349834",
+    "project_id": "stone-crushing-machine",
+    "storage_bucket": "stone-crushing-machine.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62736349834:android:862fc707d4f438191f0b73",
+        "android_client_info": {
+          "package_name": "com.stone.crusher.stone_crusher_machine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62736349834-mqk2ncilciv8qb0dc6lt319em70vtddt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stone.crusher.stone_crusher_machine",
+            "certificate_hash": "0d0bb5ae627ce054918fa31495109d78a394f889"
+          }
+        },
+        {
+          "client_id": "62736349834-oj73u25p7r24t2oicf89fbrvjb0vk2af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZwlg6q3By0ESegmCmiZpEQpSqmlk7pZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62736349834-oj73u25p7r24t2oicf89fbrvjb0vk2af.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
