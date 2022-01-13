@@ -77,20 +77,29 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: _machineCollectionStream,
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text('Something went wrong'));
-              }
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _machineCollectionStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text('Something went wrong'));
+            }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: Text("Loading"));
-              }
+            if (snapshot.connectionState == ConnectionState.waiting || snapshot.data!.size == 0) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                      child: Text(
+                    "No Machine Added",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                ],
+              );
+            }
 
-              return Column(children: [
+            return SingleChildScrollView(
+              child: Column(children: [
                 SizedBox(
                   height: 10,
                 ),
@@ -107,9 +116,9 @@ class _MainScreenState extends State<MainScreen> {
                         );
                       });
                 }).toList(),
-              ]);
-            },
-          ),
+              ]),
+            );
+          },
         ),
       ),
       floatingActionButton: Padding(
