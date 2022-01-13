@@ -103,6 +103,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   }
 
   Future<UserCredential> _signInWithGoogle() async {
+    showProgress();
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -115,6 +116,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+
+    EasyLoading.dismiss();
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
