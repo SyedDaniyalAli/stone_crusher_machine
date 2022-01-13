@@ -45,16 +45,20 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.black)),
               ),
               TextButton(
                 onPressed: () {
                   setState(() {
-                    auth.signOut();
                     Navigator.of(context).pushReplacementNamed('/');
+                    auth.signOut();
                   });
                 },
-                child: const Text('Logout', style: TextStyle(color: Colors.red),),
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ],
           );

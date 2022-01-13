@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stone_crusher_machine/main_screen/main_screen.dart';
@@ -22,24 +20,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  bool _isLoading = false;
-
-  var box;
-
-  // void _trySubmit() {
-  //   final isValid = _formKey.currentState!.validate();
-  //   FocusScope.of(context).unfocus();
-  //   _formKey.currentState!.save();
-  //
-  //   if (isValid) {
-  //     _formKey.currentState!.reset();
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    openHiveDB();
   }
 
   @override
@@ -53,6 +36,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           'Stone Crushing Machine',
         ),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -70,6 +54,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   Image.asset(
                     'dev_assets/icon/app_logo.png',
                     filterQuality: FilterQuality.high,
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -131,10 +118,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-  Future<void> openHiveDB() async {
-    box = await Hive.openBox('loginCredentials');
   }
 
   void showProgress() {
