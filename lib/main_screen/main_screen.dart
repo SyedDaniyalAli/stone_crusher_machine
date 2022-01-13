@@ -34,10 +34,31 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _logout() {
-    setState(() {
-      auth.signOut();
-      Navigator.of(context).pushReplacementNamed('/');
-    });
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text('Want to logout?'),
+            content: Text('You will redirected to Login Page'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    auth.signOut();
+                    Navigator.of(context).pushReplacementNamed('/');
+                  });
+                },
+                child: const Text('Logout', style: TextStyle(color: Colors.red),),
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -88,15 +109,28 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _showTransactionModalSheet(context);
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              _showTransactionModalSheet(context);
+            },
+            heroTag: null,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            child: Icon(Icons.power_settings_new_outlined),
+            onPressed: () => _logout(),
+            heroTag: null,
+          )
+        ]),
       ),
     );
   }
-
 
   //Show Bottom Sheet~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   void _showTransactionModalSheet(BuildContext ctx) {

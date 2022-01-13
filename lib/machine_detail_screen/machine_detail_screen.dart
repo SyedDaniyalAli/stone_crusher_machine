@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,7 +41,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                   machineID = element['machineID'];
                   machineName = element['machineName'];
                   machineState = element['state'];
-                  machineDelay = element['delay'];
+                  machineDelay = int.tryParse(element['delay'])!;
                 });
               })
             })
@@ -62,13 +61,6 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
         title: Text('Machine Settings'),
         centerTitle: true,
         toolbarHeight: 120,
-        actions: [
-          Icon(
-            Icons.delete_forever,
-            color: Colors.redAccent,
-          ),
-          SizedBox(width: 12),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -178,16 +170,54 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.delete_forever,
+          color: Colors.red,
+        ),
+        onPressed: () {
+          deleteMachine(
+            docRef: machinesCollection.doc('$machineID'),
+          );
+        },
+      ),
     );
   }
 
   Future<void> deleteMachine({
     required DocumentReference docRef,
   }) async {
-    showProgress();
-    await docRef.delete().then(
-          (value) => EasyLoading.dismiss(),
-        );
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text('Remove this machine?'),
+            content: Text('This will remove your machine'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.black)),
+              ),
+              TextButton(
+                onPressed: () {
+                  showProgress();
+                  docRef.delete().then((value) => {
+                        EasyLoading.dismiss(),
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                      });
+                },
+                child: const Text(
+                  'Remove',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> updateMachine({

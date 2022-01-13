@@ -52,7 +52,9 @@ class _MyAppState extends State<MyApp> {
           elevation: 0,
           shadowColor: Colors.black,
         ),
-        buttonTheme: ButtonThemeData(buttonColor: Colors.yellow,),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.yellow,
+        ),
         // appBarTheme: AppBarTheme(color: Colors.blueAccent),
         primarySwatch: Colors.yellow,
         // primaryColor: Colors.yellow,

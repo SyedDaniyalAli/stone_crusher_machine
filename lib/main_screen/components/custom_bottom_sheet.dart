@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -37,7 +36,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           'machineName': _machineName,
           'machineID': _machineID,
           'state': false,
-          'delay': '5000', //default delay time is 5 sec
+          'delay': '5', //default delay time is 5 sec
         })
         .then((value) => print("Machine Added"))
         .catchError((error) => print("Failed to add Machine: $error"));
