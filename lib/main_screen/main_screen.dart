@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stone_crusher_machine/machine_detail_screen/machine_detail_screen.dart';
 import 'package:stone_crusher_machine/main_screen/components/machine_card.dart';
 
 import 'components/custom_bottom_sheet.dart';
@@ -20,9 +20,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  final Stream<QuerySnapshot> _machineCollectionStream =
+      FirebaseFirestore.instance.collection('machines').snapshots();
 
   var box;
 
@@ -52,31 +53,35 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  MachineCard(
-                    machineId: '123456',
-                    machineName: 'M1',
-                    onPressed: () {},
-                  ),
-                  MachineCard(
-                    machineId: '123456',
-                    machineName: 'M2',
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _machineCollectionStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Something went wrong'));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: Text("Loading"));
+              }
+
+              return Column(children: [
+                SizedBox(
+                  height: 10,
+                ),
+                ...snapshot.data!.docs.map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  return MachineCard(
+                      machineId: data['machineID'],
+                      machineName: data['machineName'],
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(
+                            MachineDetailsScreen.routeName);
+                      });
+                }).toList(),
+              ]);
+            },
           ),
         ),
       ),

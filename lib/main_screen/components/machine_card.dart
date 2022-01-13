@@ -15,34 +15,37 @@ class MachineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.yellow.shade300,
-      child: InkWell(
-        onTap: onPressed,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(35.0),
-          child: Column(
-            children: [
-              Icon(
-                FontAwesomeIcons.cashRegister,
-                size: 80,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Machine ID: $machineId',
-                style: TextStyle(color: Colors.red),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                'Machine Name: $machineName',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+      child: Card(
+        color: Colors.yellow.shade300,
+        child: InkWell(
+          onTap: onPressed,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(35.0),
+            child: Column(
+              children: [
+                Icon(
+                  FontAwesomeIcons.cashRegister,
+                  size: 80,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Machine ID: $machineId',
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'Machine Name: $machineName',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
       ),

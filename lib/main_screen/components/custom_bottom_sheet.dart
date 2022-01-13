@@ -72,7 +72,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           else
             {
               _addMachine().then(
-                (value) => EasyLoading.showSuccess('$_machineName Added'),
+                (value) {
+                  EasyLoading.showSuccess('$_machineName Added');
+                  Navigator.pop(context);
+                },
               )
             }
         });
@@ -119,6 +122,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 decoration: InputDecoration(labelText: 'Machine ID'),
                 controller: _machineIDTC,
                 keyboardType: TextInputType.numberWithOptions(signed: false),
+                maxLength: 6,
                 onSaved: (value) {
                   _machineID = value!;
                 },
@@ -127,6 +131,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       value.isEmpty ||
                       int.tryParse(value)!.isNegative) {
                     return "Enter Machine ID";
+                  }
+                  if (value.length > 6 || value.length < 6) {
+                    return "Enter 6 digit Machine ID";
                   }
                   return null;
                 },
