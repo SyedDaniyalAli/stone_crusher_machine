@@ -67,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         toolbarHeight: 170,
         centerTitle: true,
-        // elevation: 0,
+        // elevation: 10,
         title: const Text(
           'Stone Crushing Machine',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

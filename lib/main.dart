@@ -41,8 +41,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Stone Crushing Machine',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // canvasColor: Colors.white,
-        // cardColor: Colors.white,
+        backgroundColor: Colors.white,
         cardTheme: const CardTheme(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(

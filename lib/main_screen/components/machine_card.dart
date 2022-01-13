@@ -16,8 +16,14 @@ class MachineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 7),
       child: Card(
+        elevation: 7,
+        shadowColor: Colors.redAccent,
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.circular(21),
+          side: BorderSide(color: Colors.brown),
+        ),
         color: Colors.yellow.shade500,
         child: InkWell(
           onTap: onPressed,

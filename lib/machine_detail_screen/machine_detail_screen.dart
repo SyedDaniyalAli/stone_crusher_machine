@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,7 +42,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                   machineID = element['machineID'];
                   machineName = element['machineName'];
                   machineState = element['state'];
-                  machineDelay = int.tryParse(element['delay'])!;
+                  machineDelay = element['delay'];
                 });
               })
             })
@@ -62,6 +63,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
         centerTitle: true,
         toolbarHeight: 120,
       ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -81,8 +83,14 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
               'Machine ID: $machineID',
               style: TextStyle(color: Colors.red),
             ),
-            SizedBox(
-              height: 50,
+            Container(
+              margin: EdgeInsets.only(top: 28, bottom: 28),
+              width: 280,
+              height: 4,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Theme.of(context).primaryColor,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(14.0),

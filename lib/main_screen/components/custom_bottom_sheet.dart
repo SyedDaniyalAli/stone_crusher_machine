@@ -36,7 +36,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           'machineName': _machineName,
           'machineID': _machineID,
           'state': false,
-          'delay': '5', //default delay time is 5 sec
+          'delay': 5, //default delay time is 5 sec
         })
         .then((value) => print("Machine Added"))
         .catchError((error) => print("Failed to add Machine: $error"));
