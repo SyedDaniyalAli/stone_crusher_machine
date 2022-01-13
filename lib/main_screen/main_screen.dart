@@ -2,16 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stone_crusher_machine/authentication_screen/authentication_screen.dart';
 import 'package:stone_crusher_machine/machine_detail_screen/machine_detail_screen.dart';
 import 'package:stone_crusher_machine/main_screen/components/machine_card.dart';
 
 import 'components/custom_bottom_sheet.dart';
 
 class MainScreen extends StatefulWidget {
-  static String routeName = "MainScreen";
+  static String routeName = "/MainScreen";
 
   const MainScreen({Key? key}) : super(key: key);
 
@@ -30,7 +29,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    openHiveDB();
   }
 
   void _logout() {
@@ -51,8 +49,9 @@ class _MainScreenState extends State<MainScreen> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    Navigator.of(context).pushReplacementNamed('/');
                     auth.signOut();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        AuthenticationScreen.routeName, (route) => false);
                   });
                 },
                 child: const Text(
@@ -151,10 +150,6 @@ class _MainScreenState extends State<MainScreen> {
             behavior: HitTestBehavior.opaque,
           );
         });
-  }
-
-  Future<void> openHiveDB() async {
-    box = await Hive.openBox('loginCredentials');
   }
 
   void showProgress() {

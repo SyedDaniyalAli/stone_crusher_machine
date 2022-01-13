@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'authentication_screen/authentication_screen.dart';
 import 'machine_detail_screen/machine_detail_screen.dart';
@@ -25,13 +23,11 @@ class _MyAppState extends State<MyApp> {
   bool _initialized = false;
   bool _error = false;
 
-  static String HIVE_DATABASE_NAME = 'loginCredentials';
 
   @override
   void initState() {
     super.initState();
     initializeFlutterFire();
-    initHiveDB();
   }
 
   // This widget is the root of your application.
@@ -103,6 +99,7 @@ class _MyAppState extends State<MyApp> {
             ),
         MainScreen.routeName: (ctx) => MainScreen(),
         MachineDetailsScreen.routeName: (ctx) => MachineDetailsScreen(),
+        AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
       },
     );
   }
@@ -137,13 +134,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void initHiveDB() async {
-    //local Database name~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    await Hive.initFlutter();
-    // var dir = await getApplicationDocumentsDirectory();
-    // Hive.init(dir.path);
-    await Hive.openBox(HIVE_DATABASE_NAME);
-  }
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {

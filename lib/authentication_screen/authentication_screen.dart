@@ -7,7 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stone_crusher_machine/main_screen/main_screen.dart';
 
 class AuthenticationScreen extends StatefulWidget {
-  static String routeName = "AuthenticationScreen";
+  static String routeName = "/AuthenticationScreen";
 
   const AuthenticationScreen({Key? key}) : super(key: key);
 
@@ -82,6 +82,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                               _signInWithGoogle();
 
                           userCredentials.then((value) async {
+                            EasyLoading.dismiss();
                             if (value.user != null) {
                               Navigator.pushReplacementNamed(
                                   context, MainScreen.routeName);
@@ -116,8 +117,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
-    EasyLoading.dismiss();
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);

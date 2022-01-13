@@ -9,7 +9,7 @@ import 'package:flutter_picker/flutter_picker.dart';
 import '../custom_edit_dialog.dart';
 
 class MachineDetailsScreen extends StatefulWidget {
-  static String routeName = "MachineDetailsScreen";
+  static String routeName = "/MachineDetailsScreen";
 
   const MachineDetailsScreen({Key? key}) : super(key: key);
 
