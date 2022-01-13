@@ -36,7 +36,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           'uid': '${_user!.uid}', // John Doe
           'machineName': _machineName,
           'machineID': _machineID,
-          'state': 'off',
+          'state': false,
           'delay': '5000', //default delay time is 5 sec
         })
         .then((value) => print("Machine Added"))

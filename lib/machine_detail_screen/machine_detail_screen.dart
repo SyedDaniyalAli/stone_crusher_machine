@@ -1,12 +1,283 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
-class MachineDetailsScreen extends StatelessWidget {
+import '../custom_edit_dialog.dart';
+
+class MachineDetailsScreen extends StatefulWidget {
   static String routeName = "MachineDetailsScreen";
 
   const MachineDetailsScreen({Key? key}) : super(key: key);
 
   @override
+  State<MachineDetailsScreen> createState() => _MachineDetailsScreenState();
+}
+
+class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
+  String machineID = '';
+  String machineName = '';
+  bool machineState = false;
+  int machineDelay = 5;
+
+  // Create a CollectionReference called users that references the firestore collection
+  CollectionReference machinesCollection =
+      FirebaseFirestore.instance.collection('machines');
+
+  void updateData() {
+    final machineIdLocal = ModalRoute.of(context)!.settings.arguments as String;
+    showProgress();
+
+    machinesCollection
+        .where('machineID', isEqualTo: machineIdLocal)
+        .limit(1)
+        .get()
+        .then((snapShot) => {
+              snapShot.docs.forEach((element) {
+                print(element['machineID']);
+                setState(() {
+                  machineID = element['machineID'];
+                  machineName = element['machineName'];
+                  machineState = element['state'];
+                  machineDelay = element['delay'];
+                });
+              })
+            })
+        .whenComplete(() => EasyLoading.dismiss());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    updateData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Machine Settings'),
+        centerTitle: true,
+        toolbarHeight: 120,
+        actions: [
+          Icon(
+            Icons.delete_forever,
+            color: Colors.redAccent,
+          ),
+          SizedBox(width: 12),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Icon(
+              FontAwesomeIcons.cashRegister,
+              size: 162,
+            ),
+            SizedBox(
+              height: 21,
+            ),
+            Text(
+              'Machine ID: $machineID',
+              style: TextStyle(color: Colors.red),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showNameDialogBox(machineID);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "Machine Name: " + machineName,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 4.0),
+                        Icon(
+                          Icons.edit,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 21,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Machine State ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      FlutterSwitch(
+                        width: 70.0,
+                        height: 27.0,
+                        valueFontSize: 10.0,
+                        toggleSize: 40.0,
+                        value: machineState,
+                        borderRadius: 30.0,
+                        padding: 8.0,
+                        toggleColor: Colors.black,
+                        activeColor: Theme.of(context).primaryColor,
+                        activeTextColor: Colors.black,
+                        showOnOff: true,
+                        onToggle: (val) {
+                          setState(() {
+                            machineState = val;
+                            updateMachine(
+                              docRef: machinesCollection.doc('$machineID'),
+                              map: {
+                                'state': val,
+                              },
+                            );
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 21,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showPickerNumber(context);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'Machine Delay: ' +
+                              machineDelay.toString() +
+                              ' Seconds',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 4.0),
+                        Icon(
+                          Icons.edit,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> deleteMachine({
+    required DocumentReference docRef,
+  }) async {
+    showProgress();
+    await docRef.delete().then(
+          (value) => EasyLoading.dismiss(),
+        );
+  }
+
+  Future<void> updateMachine({
+    required DocumentReference docRef,
+    required Map<String, dynamic> map,
+  }) async {
+    showProgress();
+    await docRef.get().then(
+      (doc) {
+        if (doc.exists) {
+          // Call the user's CollectionReference
+          return docRef.update(map).then((value) {
+            EasyLoading.showSuccess('Changes updated');
+          }).catchError((error) {
+            EasyLoading.showError('Changes updated');
+            print('machine_detail_screen: $error');
+          });
+        } else {
+          print('can\'t able to update name');
+        }
+      },
+    );
+  }
+
+  void showNameDialogBox(String uid) {
+    CustomEditDialog.showScaleEditDialog(
+      hintText: 'Machine Name',
+      context: context,
+      message: '',
+      title: 'Machine Name',
+      buttonText: 'Change it',
+      onPressed: () {
+        //Check if Form is Valid
+        var _isFormValid = CustomEditDialog.trySubmit();
+        if (CustomEditDialog.textData != null && _isFormValid) {
+          setState(() {
+            machineName = CustomEditDialog.textData;
+          });
+          updateMachine(
+            docRef: machinesCollection.doc('$uid'),
+            map: {
+              'machineName': CustomEditDialog.textData,
+            },
+          ).onError(
+            (error, stackTrace) {
+              EasyLoading.showError('Can\'t able to update name');
+            },
+          );
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
+
+  showPickerNumber(BuildContext context) {
+    new Picker(
+        adapter: NumberPickerAdapter(data: [
+          NumberPickerColumn(
+            initValue: machineDelay,
+            begin: 2,
+            end: 30,
+          ),
+        ]),
+        delimiter: [
+          PickerDelimiter(
+            child: Container(
+              alignment: Alignment.center,
+            ),
+          )
+        ],
+        hideHeader: true,
+        title: new Text("Please Select Delay"),
+        onConfirm: (Picker picker, List value) {
+          // print(value.toString());
+          print(picker.getSelectedValues());
+          updateMachine(
+            docRef: machinesCollection.doc('$machineID'),
+            map: {
+              'delay': int.tryParse(picker.getSelectedValues()[0].toString()),
+            },
+          );
+        }).showDialog(context);
+  }
+
+  void showProgress() {
+    EasyLoading.show(
+      status: 'Loading...',
+      indicator: CircularProgressIndicator(),
+      dismissOnTap: false,
+      maskType: EasyLoadingMaskType.black,
+    );
   }
 }

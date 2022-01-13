@@ -44,11 +44,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 110,
+        toolbarHeight: 170,
         centerTitle: true,
         // elevation: 0,
         title: const Text(
           'Stone Crushing Machine',
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -76,8 +77,10 @@ class _MainScreenState extends State<MainScreen> {
                       machineId: data['machineID'],
                       machineName: data['machineName'],
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(
-                            MachineDetailsScreen.routeName);
+                        Navigator.of(context).pushNamed(
+                          MachineDetailsScreen.routeName,
+                          arguments: data['machineID'],
+                        );
                       });
                 }).toList(),
               ]);
@@ -93,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
 
   //Show Bottom Sheet~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   void _showTransactionModalSheet(BuildContext ctx) {
