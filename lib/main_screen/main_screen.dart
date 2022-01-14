@@ -21,8 +21,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  final Stream<QuerySnapshot> _machineCollectionStream =
-      FirebaseFirestore.instance.collection('machines').snapshots();
+  final Stream<QuerySnapshot> _machineCollectionStream = FirebaseFirestore
+      .instance
+      .collection('machines')
+      .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+      .snapshots();
 
   var box;
 
@@ -85,7 +88,8 @@ class _MainScreenState extends State<MainScreen> {
               return Center(child: Text('Something went wrong'));
             }
 
-            if (snapshot.connectionState == ConnectionState.waiting || snapshot.data!.size == 0) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                snapshot.data!.size == 0) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
