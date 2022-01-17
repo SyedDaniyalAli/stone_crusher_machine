@@ -301,6 +301,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
         onConfirm: (Picker picker, List value) {
           // print(value.toString());
           print(picker.getSelectedValues());
+          machineDelay = int.tryParse(picker.getSelectedValues()[0].toString())!;
           updateMachine(
             docRef: machinesCollection.doc('$machineID'),
             map: {
