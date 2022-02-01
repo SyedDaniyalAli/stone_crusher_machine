@@ -1,5 +1,7 @@
 # Stone Crusher Machine
 
+## Developed by SDA
+
 This project is an IOT based project, it can contol your stone crushing machine at a distance where internet is available.
 
 Steps to Start a project:
